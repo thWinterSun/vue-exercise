@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+<div id="app">
+	<ul>
+		<li>
+			<router-link to="/user/:aa/profile">profile</router-link>
+		</li>
+	</ul>
+	<!-- 设置内容显示部分 -->
+	<router-view></router-view>
+</div>
+<template id="aaa">
+	<div class="user"> 
+		<h2>这里是根出口</h2>
+		<router-view></router-view>
+	</div>
+
+</template>
+<template id="bb">
+	<h3>这里是子组件数据</h3>
+</template>
+<script type="text/javascript" src="../js/vue.js"></script>
+<script type="text/javascript" src="../js/vue-router.min.js"></script>
+<script type="text/javascript">
+	const User = {
+		template: '#aaa'
+	}
+	const router = new VueRouter({
+		routes: [
+			{
+				path: '/user/:id', 
+				component: User,
+				children: [
+					{
+						path:'profile',
+						component: {
+							template: '#bb'
+						}
+					}
+				]
+			}
+		]
+	})
+	//挂载到根实例
+	const app = new Vue({
+		router
+	}).$mount("#app")
+</script>
+
+</body>
+</html>

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>地址对象</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<style type="text/css">
+		[v-cloak] {
+		  display: none;
+		}
+	</style>
+</head>
+<body>
+<div class="row" id="example">
+    <div class="col-lg-6" id="main-box" v-if="addShow">
+		<header class="main-box-header clearfix">
+            <div class="filter-block pull-right">
+            	<a href="#" class="btn btn-primary  btn-sm Obj_add" @click="addSetData()">
+                    
+                    	添加
+                </a>
+                <a href="#" class="btn btn-primary  btn-sm " id="all_select"  @click="checkedAll()">
+                    	全选
+                </a>
+                <a href="#" class="btn btn-primary btn-sm customObj_del md-trigger" @click="delAny()">
+                    	删除
+                </a>
+               
+                
+            </div>
+        </header>
+		<div class="table-responsive">
+	        <table id="license_tb" class="table table-bordered  table-hover" v-cloak> 
+	            <thead>
+	                <tr class="info">
+	                	<th>
+	                		序号
+	                	</th>
+	                    <th >
+	                        <span style="width: 8%;">
+	                    		名称
+	                        </span>
+	                    </th>
+	                    <th >
+	                        <span>
+	                           	描述
+	                        </span>
+	                    </th>
+	                    <th >
+	                         <span>
+	                           	网络地址
+	                        </span>	
+	                    </th>
+	                    <th >
+	                         <span>
+	                           	范围地址
+	                        </span>
+	                    </th>
+	                     <th >
+	                         <span>
+	                           	主机地址
+	                        </span>
+	                    </th>
+	                    <th>
+	                    	操作
+	                    </th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	               <tr v-for="item in items">
+	               		<td ><input type="checkbox" v-model="allChecks"  class='form-control' :value="$index" @click="pushInde($index)"/></td>
+	               		<td>{{item.name}}</td>
+	               		<td>{{item.desc}}</td>
+	               		<td>
+	               			<ul>
+	               				<li>地址项目:3.3.3.3</li>
+	               				<li>排除地址:1.1.1.1</li>
+	               			</ul>
+	               		</td>
+	               		<td>
+	               			<ul>
+	               				<li>地址项目:3.3.3.3</li>
+	               				<li>排除地址:1.1.1.1</li>
+	               			</ul>
+	               		</td>
+	               		<td>
+	               			<ul>
+	               				<li>地址项目:3.3.3.3</li>
+	               				<li>排除地址:1.1.1.1</li>
+	               			</ul>
+	               		</td>
+	               		
+	               		<td>
+	               			<input type="button" class="button btn-primary btn-xm" value="编辑" @click="editGetData($index)"/>
+	               			<input type="button" class="button btn-danger btn-xm" value="删除" @click="delData($index)"/>
+	               		</td>
+	               </tr>
+	              
+	            </tbody>
+	        </table>
+	    </div>
+	</div>
+	<div id="pop_one_1" v-else="addShow">
+    	<div class="row">
+			<div class="col-lg-12 pricing-package">
+				<div class="main-box" v-cloak>
+					<div class="package-header popTitle ">
+						<h3 class="text-primary popAdd" >{{popTitle}}</h3>
+					</div>
+					<div class="main-box-body clearfix">
+						<form id="formcontrl" class="form-horizontal" role="form">
+							<div class="form-group">
+								<label for="addAdminUser_name" class="col-lg-1 control-label">
+									<em class="text-danger">*</em>
+									用户名 :
+								</label>
+								<div class="col-lg-2">
+									<input type="text" class="form-control input_control" :disabled="disable"  id="addAdminUser_name" v-model="userName">
+								</div>
+								<span class="col-lg-1 text-primary"><i class="icon-ok-sign"></i> (1-32字符)</span>
+							</div>
+							<div class="form-group">
+								<label for="addAdminUser_desc" class="col-lg-1 control-label">
+									描述  :
+								</label>
+								<div class="col-lg-2">
+									<input type="text" class="form-control input_control"  id="addAdminUser_desc" v-model="desc">
+								</div>
+								<span class="text-primary">(1-128字符)</span>
+							</div>
+							
+						</form>
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label for="peerIp_input" class="col-lg-1 control-label">地址项目  :</label>
+								<div class="col-lg-4 proAddr">
+									<div class="radio_inline">
+										<input  type="radio" name="level" id="networkAddr"  checked="checked" @click = "showNetWork()">
+										<label for="networkAddr">
+											网络地址
+										</label>
+									</div>
+									<div class="radio_inline">
+										<input type="radio" name="level" id="rangeAddr" @click = "showRange()">
+										<label for="rangeAddr">
+											范围地址
+										</label>
+									</div>
+									<div class="radio_inline">
+										<input  type="radio" name="level" id="hostAddr" @click = "showHost()">
+										<label for="hostAddr">
+											主机地址
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group ">
+								<div  id="networkAddrLi" v-show="networkAddrLi">
+									<div class="col-lg-2 col-lg-offset-1">
+										<input type="text"  placeholder="本地地址" class="form-control localAddr ip_address" v-model="localAddr"/>
+									</div>  
+									<div class="col-lg-2">
+										<input type="text"  placeholder="子网掩码" class="form-control subnetMask ip_address" v-model="subnetMask"/>
+									</div>
+									<div class="col-lg-1">
+										<input id="networkAddrBtn" class="btn btn-primary btn-sm " type="button" value="添加" @click="addNetworkData">
+									</div>
+								</div>	
+								<div  id="rangeAddrLi" v-show="rangeAddrLi">
+									<div class="col-lg-2 col-lg-offset-1">
+										<input type="text"  placeholder="起始IP" class="form-control beginIp ip_address" v-model="beginIp"/>
+									</div>
+									<div class="col-lg-2">
+										<input type="text"  placeholder="结束IP" class="form-control endIp ip_address" v-model="endIp"/>
+									</div>
+									<div class="col-lg-1">
+										<input id="rangeAddrBtn" class="btn btn-primary btn-sm " type="button" value="添加" @click="addRangeData">
+									</div>
+									
+								</div>
+								<div id="hostAddrLi" v-show="hostAddrLi">
+									<div class="col-lg-2 col-lg-offset-1">
+										<input type="text"  placeholder="主机地址" class="form-control hostAddrInput ip_address" v-model="hostAddr"/>
+									</div>
+									<div class="col-lg-1">
+										<input id="hostAddrBtn" class="btn btn-primary btn-sm " type="button" value="添加" @click="addHostData">
+									</div>
+									
+								</div>
+								<span class="text-primary"></span>
+							</div>
+						</form>
+						<form class="form-horizontal col-lg-4 col-lg-offset-1" role="form" >
+							<div  class="table_border overflow">
+								<table class="table table-bordered" id="proAddrTable">
+									<thead>
+										<tr class="info">
+											<th>类型</th>
+											<th>地址项</th>
+											<th style="width: 20%;">操作</th>
+										</tr>
+										<tr v-for="addrIp in addrData">
+											<td v-text="addrIp.addr_type"></td>
+											<td v-text="addrIp.ip"></td>
+											<td>
+	               								<input type="button" class="button btn-danger btn-xm" value="删除" @click="delTr($index)"/>
+											</td>
+										</tr>
+									</thead>
+									<tbody></tbody>
+								</table>
+							</div>
+							
+						</form>
+						<form class="form-horizontal col-lg-12" role="form" >
+							<div class="form-group col-lg-12 ">
+								<label for="peerIp_input" class="col-lg-1 control-label">排除地址 :</label>
+								<div class="col-lg-4 proAddr">
+									<div class="radio_inline">
+										<input  type="radio" name="level" id="ExNetworkAddr"  checked="checked" @click="showExNetWork">
+										<label for="ExNetworkAddr">
+											网络地址
+										</label>
+									</div>
+									<div class="radio_inline">
+										<input type="radio" name="level" id="ExRangeAddr" @click="showExRange">
+										<label for="ExRangeAddr">
+											范围地址
+										</label>
+									</div>
+									<div class="radio_inline">
+										<input  type="radio" name="level" id="ExHostAddr" @click="showExHost">
+										<label for="ExHostAddr">
+											主机地址
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group col-lg-12">
+								<div  id="ExNetworkAddrLi" v-show="ExnetworkAddrLi">
+									<div class="col-lg-2 col-lg-offset-1">
+										<input type="text"  placeholder="本地地址" class="form-control localAddr ip_address" v-model="ExlocalAddr"/>
+									</div>
+									<div class="col-lg-2">
+										<input type="text"  placeholder="子网掩码" class="form-control subnetMask ip_address" v-model="ExsubnetMask"/>
+									</div>
+									<div class="col-lg-1">
+										<input id="ExNetworkAddrBtn" class="btn btn-primary btn-sm " type="button" value="添加" @click="addExNetworkData">
+									</div>
+								</div>	
+								<div  id="ExRangeAddrLi" v-show="ExrangeAddrLi">
+									<div class="col-lg-2 col-lg-offset-1">
+										<input type="text"  placeholder="起始IP" class="form-control beginIp ip_address" v-model="ExbeginIp"/>
+									</div>
+									<div class="col-lg-2">
+										<input type="text"  placeholder="结束IP" class="form-control endIp ip_address" v-model="ExendIp"/>
+									</div>
+									<div class="col-lg-1">
+										<input id="ExRangeAddrBtn" class="btn btn-primary btn-sm " type="button" value="添加" @click="addExRangeData">
+									</div>
+									
+								</div>
+								<div id="ExHostAddrLi" v-show="ExhostAddrLi">
+									<div class="col-lg-2 col-lg-offset-1">
+										<input type="text"  placeholder="主机地址" class="form-control hostAddrInput ip_address" v-model="ExhostAddr"/>
+									</div>
+									<div class="col-lg-1">
+										<input id="ExHostAddrBtn" class="btn btn-primary btn-sm " type="button" value="添加" @click="addExHostData">
+									</div>
+									
+								</div>
+								<span class="text-primary"></span>
+							</div>
+						</form>
+						
+						<form class="form-horizontal col-lg-4 col-lg-offset-1" role="form">
+							<div  class="table_border overflow">
+								<table class="table table-bordered " id="ExAddrTable">
+									<thead>
+										<tr class="info">
+											<th>类型</th>
+											<th>地址项</th>
+											<th style="width: 20%;">操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="ExaddrIp in ExAddrData">
+											<td v-text="ExaddrIp.addr_type"></td>
+											<td v-text="ExaddrIp.ip"></td>
+											<td>
+	               								<input type="button" class="button btn-danger btn-xm" value="删除" @click="delExTr($index)"/>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</form>
+						
+						<div class="btn_div col-lg-12 col-lg-offset-1">
+							<input type="reset" name="pagereset" id="pagereset" value=""  style="display: none;"/>
+							<input id="close" class="btn btn-default popClose" type="reset" value="关闭" @click="CloseCon()">
+							<input id="AddadminUser_submit" class="btn btn-primary" type="button" value="提交" @click="addSubmit()" v-if="isAdd">
+							<input id="EditadminUser_submit" class="btn btn-primary" type="button" value="提交" v-else="isAdd" @click="editSubmit()">
+						</div>
+					</div>
+				</div>
+			</div>	
+		</div>	
+    </div>
+</div>	    
+	<script src="js/vue.js" ></script>
+	
+	<script type="text/javascript">
+//		require.config({
+//			baseUrl: 'js',
+//			paths:{
+//				"vue":"vue",
+//				"vue-Ajax":"vue-resource"
+//			}
+//		});
+//		require(['vue'], function (Vue){
+		
+			var vm = new Vue({
+				el:'#example',
+				data:{
+					items:[],
+					addrData:[],//存地址项目内数据
+					ExAddrData:[],//存排除地址项目内数据
+					addrs:[],
+	        		addShow:true,//控制添加、编辑页面显示隐藏
+	        		isAdd:true,//控制添加提交按钮显示还是编辑提交显示
+	        		disable:false,//控制输入框是否可以编辑
+	        		networkAddrLi:true,
+	        		rangeAddrLi:false,
+	        		hostAddrLi:false,
+	        		ExnetworkAddrLi:true,
+	        		ExrangeAddrLi:false,
+	        		ExhostAddrLi:false,
+	        		popTitle:'添加',
+	        		userName:'',
+	        		desc:'',
+	        		localAddr:'',
+	        		subnetMask:'',
+	        		beginIp:'',
+	        		endIp:'',
+	        		hostAddr:'',
+	        		ExlocalAddr:'',
+	        		ExsubnetMask:'',
+	        		ExbeginIp:'',
+	        		ExendIp:'',
+	        		ExhostAddr:'',
+	        		dataIndex:'',//存当前点击第几条的$index
+	        		allChecked:"",
+	        		allChecks:[],//存被选中的$index
+	        		
+				},
+				methods:{
+					ShowCon:function(){
+						this.addShow = false;
+						this.resetInput(); 
+					},
+					CloseCon:function(){
+						this.addShow = true; 
+					},
+					resetInput:function(){
+						this.userName = '';
+						this.desc = '';
+					},
+					
+					addSetData:function(){
+						this.ShowCon();
+						this.isAdd = true;
+						this.popTitle = "添加";
+						this.disable = false;
+					},
+					//地址项目输入框切换
+					showNetWork:function(){
+						this.networkAddrLi = true;
+						this.rangeAddrLi = false;
+						this.hostAddrLi = false;
+					},
+					showRange:function(){
+						this.networkAddrLi = false;
+						this.rangeAddrLi = true;
+						this.hostAddrLi = false;
+					},
+					showHost:function(){
+						this.networkAddrLi = false;
+						this.rangeAddrLi = false;
+						this.hostAddrLi = true;
+					},
+					//地址项目>网络地址添加
+					addNetworkData:function(){
+						this.addrData.push({
+							//action:"add"
+							addr_type:"网络地址",
+							exclude:0,
+							ip:this.localAddr+"/"+this.subnetMask
+						});
+						//清空
+						this.localAddr = '';
+						this.subnetMask = '';
+					},
+					//地址项目>范围地址添加 
+					addRangeData:function(){
+						this.addrData.push({
+							//action:"add"
+							addr_type:"范围地址",
+							exclude:0,
+							ip:this.beginIp+"-"+this.endIp
+						});
+						this.beginIp = '';
+						this.endIp = '';
+					},
+					//地址项目>主机地址添加 
+					addHostData:function(){
+						this.addrData.push({
+							//action:"add"
+							addr_type:"主机地址",
+							exclude:0,
+							ip:this.hostAddr
+						});
+						this.hostAddr = '';
+					},
+					//排除地址输入框切换
+					showExNetWork:function(){
+						this.ExnetworkAddrLi = true;
+						this.ExrangeAddrLi = false;
+						this.ExhostAddrLi = false;
+					},
+					showExRange:function(){
+						this.ExnetworkAddrLi = false;
+						this.ExrangeAddrLi = true;
+						this.ExhostAddrLi = false;
+					},
+					showExHost:function(){
+						this.ExnetworkAddrLi = false;
+						this.ExrangeAddrLi = false;
+						this.ExhostAddrLi = true;
+					},
+					//排除地址>网络地址添加
+					addExNetworkData:function(){
+						this.ExAddrData.push({
+							//action:"add"
+							addr_type:"网络地址",
+							exclude:1,
+							ip:this.ExlocalAddr+"/"+this.ExsubnetMask
+						});
+						this.ExlocalAddr = '';
+						this.ExsubnetMask = '';
+					},
+					//排除地址>范围地址添加 
+					addExRangeData:function(){
+						this.ExAddrData.push({
+							//action:"add"
+							addr_type:"范围地址",
+							exclude:1,
+							ip:this.ExbeginIp+"-"+this.ExendIp
+						});
+						this.ExbeginIp = '';
+						this.ExendIp = '';
+					},
+					//排除地址>主机地址添加 
+					addExHostData:function(){
+						this.ExAddrData.push({
+							//action:"add"
+							addr_type:"主机地址",
+							exclude:1,
+							ip:this.ExhostAddr
+						});
+						this.ExhostAddr = '';
+					},
+					//表格内数据删除
+					delTr:function(num){
+						this.addrData.splice(num,1);
+					},
+					delExTr:function(num){
+						this.ExAddrData.splice(num,1);
+					},
+					addSubmit:function(){
+						this.items.push({
+							name:this.userName,
+							desc:this.desc,
+							addr:this.addrs
+							
+							
+						});
+						this.addShow = true; 
+					},
+					editGetData:function(num){
+						this.dataIndex = num;
+						this.ShowCon();
+						this.popTitle = "编辑";
+						this.disable = true;
+						this.isAdd = false;
+						this.userName = this.items[num].name;
+						this.desc = this.items[num].desc;
+					},
+					editSubmit:function(){
+						this.items[this.dataIndex].name = this.userName;
+						this.items[this.dataIndex].desc = this.desc;
+						this.addShow = true; 
+					},
+					delData:function(num){
+						this.items.splice(num,1);
+						//this.items.$remove(this.items[num]);
+					},
+					delAny:function(){
+			            var arr = [];
+			            var len = this.items.length;
+			            if(this.allChecks.length === 0){
+				        	alert("删除个数不能为0！");
+			            }else if(len>0){
+				            for (var i = 0; i < len; i++) {
+				                if (this.allChecks.indexOf(i)>=0) {
+				                    console.log(this.allChecks.indexOf(i))
+				                }else{
+				                    arr.push(this.allChecks[i])
+				                }
+				            }
+				            this.items = arr;
+				            this.allChecks = []
+				        }
+			        },
+			        inArray:function(arr,val){
+			        	var i = arr.length;
+						while (i--) {
+						    if (arr[i] === val) {
+						      return true;
+						    }
+						}
+						return false;
+			        },
+			        pushInde:function(n){
+			        	var b = this.inArray(this.allChecks,n);
+			        	if(b){
+			        		this.allChecks.pop(n);
+			        	}else{
+			        		this.allChecks.push(n);
+			        	}
+			        	console.log(this.allChecks);
+			        },
+					checkedAll: function() {
+					    var _this = this;
+					    //console.log(_this.allChecked);
+					    if (this.allChecked) {//实现反选
+					      _this.allChecks = [];
+					      this.allChecked = false;
+					    }else{//实现全选
+					      _this.allChecks = [];
+					      _this.items.forEach(function(item,i) {
+					        _this.allChecks.push(i);
+					      });
+					      this.allChecked = true;
+					    }
+					}
+				
+				}
+			});
+			
+			vm.$watch("addrData",function(){
+				this.addrs.push(this.addrData);
+			},{deep:true});
+			vm.$watch("ExAddrData",function(){
+				this.addrs.push(this.ExAddrData);
+			},{deep:true});
+		//});
+	</script>
+
+</body>
+</html>

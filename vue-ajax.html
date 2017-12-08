@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="UTF-8"/>
+
+</head>
+<body>
+
+	<input type="button" value="获取" @click = "getData()"/>
+    <script src="js/vue.js" ></script>
+    <script src="js/vue-resource.js" ></script>
+    <script type="text/javascript">
+    var vm = new Vue({
+    	el:'body',
+    	data:{
+			strData:{
+                "head": {
+                "module": "rule",
+                "function": "get_passwd_ref",
+                "page_index": 1,
+                "page_size": 20
+                },
+                "body": [{
+                "search": "",
+                "is_detail": false
+                }]
+            }
+        },    
+    	methods:{
+    		getData:function(){
+    			//get方法
+    			/*this.$http.get('a.json').then(function(res){
+    				var StrData = JSON.stringify(res.data);
+    				alert(res.data[0].name);
+    			},function(res){
+    				alert(res.status);
+    			});
+    			*/
+    			
+    			/*this.$http({
+    				url:"http://127.0.0.1:8020/vueTest/a.txt",
+    				data:{
+    					
+    				}
+    			}).then(function(res){
+    				alert(res.data);
+    			})*/
+    			//console.log(JSON.stringify(this.strData))
+    			this.$http({
+					url:"http://192.168.188.128:8080/data/",
+					data:JSON.stringify(this.strData),
+					method:'jsonp',
+					jsonp:'cb',
+					http: {
+					   headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+					}
+					
+				}).then(function(res){
+					alert(res.data);
+				}).then(function(res){
+					alert(res)
+				});
+    			//跨域方法
+    			
+    			/*this.$http.jsonp('http://192.168.188.128:8080/',{
+                   ws:"data/"
+                },{
+                    jsonp:'cb'
+                }).then(function(res){
+                    document.body.innerHTML = res.data;
+                },function(){
+                    
+                });
+               */
+               
+    			
+    		}
+    	}
+    });
+    </script>
+
+</body>
+</html>

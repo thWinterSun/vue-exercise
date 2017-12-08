@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="box">
+			<tb-heading :level="2">
+				<a href="#">Hello </a>
+			</tb-heading>
+		</div>
+		
+		<script src="../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript">
+			var getChildrenTextContent = function (children) {
+				return children.map(function(node) {
+					return node.children ? getChildrenTextContent(node.children) : node.text
+				}).join('')
+			};
+
+			Vue.component('tb-heading',{
+				render: function(createElement) {
+					var headingId = getChildrenTextContent(this.$slots.default).toLowerCase()
+					.replace(/\W+/g,'-')
+					return createElement(
+						'h' + this.level,
+						[
+							createElement('a',{
+								attrs: {
+									name: headingId,
+									href: '#headingId'
+								},
+								style: {
+									color: 'red',
+									fontSize: '20px'
+								},
+								'class':{
+									foo:true,
+									bar:false
+								},
+								domProps: {
+									innerHTML: 'baz'
+								},
+								props: {
+									myProp: 'bar'
+								},
+								on: {
+									click: function(event) {
+										event.preventDefault();
+										console.log(111);
+									}
+								}
+							})
+						]
+					)
+				}
+			})
+		</script>
+	</body>
+</html>

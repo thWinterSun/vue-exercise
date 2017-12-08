@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="box">
+			{{mag |toDou("2")}}
+		</div>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			Vue.filter("toDou",function(n,a){
+				return n<10?'0'+n:''+n;
+			})
+			var vm = new Vue({
+				el:"#box",
+				data:{
+					mag:9
+				}
+			});
+		</script>
+	</body>
+</html>

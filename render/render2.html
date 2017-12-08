@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="box">
+			<tb-heading :level="3">
+				<a href="#">Hello </a>
+			</tb-heading>
+		</div>
+		
+		<script src="../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript">
+			Vue.component('tb-heading',{
+				render: function(createElement){
+					return createElement(
+						'h' + this.level,
+						this.$slots.default
+					)
+				},
+				props: {
+					level: {
+						type: Number,
+						required: true
+					}
+				}
+			})
+			var vm = new Vue({
+				el: '#box'
+			})
+		</script>
+	</body>
+</html>

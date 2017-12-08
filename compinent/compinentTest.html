@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="content">
+			<parent></parent>
+		</div>
+		<template id="parentCon">
+			<ul>
+				<li>aaa</li>
+				<child :m = "msg"></child>
+			</ul>
+		</template>
+
+		<template id="childCon">
+			<li>{{msg}}</li>
+		</template>
+
+		<script src = "../js/vue.js"></script>
+		<script>
+			var vm = new Vue({
+				el:"#content",
+				components:{
+					"parent":{
+						template:"#parentCon",
+						data(){
+							return{
+								msg:"父组件的数据"
+							}
+						},
+						components:{
+							"child":{
+								template:"<li>{{msg}}</li>",
+								props:["m"]
+							}
+						}
+					}
+				}
+			});
+
+
+
+		</script>
+	</body>
+</html>

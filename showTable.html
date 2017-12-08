@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>管理员设置</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<style type="text/css">
+		[v-cloak] {
+		  display: none;
+		}
+	</style>
+</head>
+<body>
+<div class="row" id="example">
+    <div class="col-lg-6" id="main-box" v-if="addShow">
+		<header class="main-box-header clearfix">
+            <div class="filter-block pull-right">
+            	<a href="#" class="btn btn-primary  btn-sm Obj_add" @click="addSetData()">
+                    
+                    	添加
+                </a>
+                <a href="#" class="btn btn-primary  btn-sm " id="all_select"  @click="checkedAll()">
+                    	全选
+                </a>
+                <a href="#" class="btn btn-primary btn-sm customObj_del md-trigger" @click="delAny()">
+                    	删除
+                </a>
+               
+                
+            </div>
+        </header>
+		<div class="table-responsive">
+	        <table id="license_tb" class="table table-bordered  table-hover" v-cloak> 
+	            <thead>
+	                <tr class="info">
+	                	<th>
+	                		序号
+	                	</th>
+	                    <th >
+	                        <span style="width: 8%;">
+	                    		管理员名称
+	                        </span>
+	                    </th>
+	                    <th >
+	                        <span>
+	                           	描述
+	                        </span>
+	                    </th>
+	                    <th >
+	                        <span>
+	                            角色
+	                        </span>
+	                    </th>
+	                    <th >
+	                        <span>
+	                           	登录类型
+	                        </span>
+	                    </th>
+	                    <th>
+	                    	操作
+	                    </th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	               <tr v-for="(item,index) in items">
+	               		<td ><input type="checkbox" v-model="allChecks"  class='form-control' :value="index" @click="pushInde(index)"/></td>
+	               		<td>{{item.name}}</td>
+	               		<td>{{item.desc}}</td>
+	               		<td>{{item.role}}</td>
+	               		<td>{{item.modes}}</td>
+	               		<td>
+	               			<input type="button" class="button btn-primary btn-xm" value="编辑" @click="editGetData(index)"/>
+	               			<input type="button" class="button btn-danger btn-xm" value="删除" @click="delData(index)"/>
+	               		</td>
+
+	               </tr>
+	            </tbody>
+	        </table>
+	    </div>
+	</div>
+	<div id="pop_one_1" v-else="addShow">
+    	<div class="row">
+			<div class="col-lg-12 pricing-package">
+				<div class="main-box" v-cloak>
+					<div class="package-header popTitle ">
+						<h3 class="text-primary popAdd" >{{popTitle}}</h3>
+					</div>
+					<div class="main-box-body clearfix">
+						<form id="formcontrl" class="form-horizontal" role="form">
+							<div class="form-group">
+								<label for="addAdminUser_name" class="col-lg-1 control-label">
+									<em class="text-danger">*</em>
+									用户名 :
+								</label>
+								<div class="col-lg-2">
+									<input type="text" class="form-control input_control" :disabled="disable"  id="addAdminUser_name" v-model="userName">
+								</div>
+								<span class="col-lg-1 text-primary"><i class="icon-ok-sign"></i> (1-32字符)</span>
+							</div>
+							<div class="form-group">
+								<label for="addAdminUser_desc" class="col-lg-1 control-label">
+									描述  :
+								</label>
+								<div class="col-lg-2">
+									<input type="text" class="form-control input_control"  id="addAdminUser_desc" v-model="desc">
+								</div>
+								<span class="text-primary">(1-128字符)</span>
+							</div>
+							<div class="form-group">
+								<label for="addAdminUser_role" class="col-lg-1 control-label">
+									角色 :
+								</label>
+								<div class="col-lg-2">
+									<select class="form-control"  v-model="selected">
+										<option  v-for="rol in roles" :value="rol.value" v-text="rol.text"></option>
+										
+									</select>
+								</div>
+							</div>
+							
+							
+							<div class="form-group checkbox_list">
+								<label for="addAdminUser_password_confirm" class="col-lg-1 control-label">
+									<em class="text-danger">*</em>
+									登录类型 :
+								</label>
+								<div class="col-lg-4 ">
+									<div class="checkbox-inline" v-for="checkb in checkboxData">	
+										<input type='checkbox' name='checkboxinput' :id="checkb.id" class='form-control' v-model="checkModes"  :value='checkb.value'>
+										<label :for="checkb.id" v-text="checkb.value"></label>
+									</div>	
+
+								</div>
+								<!--<span>{{ checkModes | json }}</span>-->
+							</div>
+							<div class="btn_div col-lg-2 col-lg-offset-1">
+								<input type="reset" name="pagereset" id="pagereset" value=""  style="display: none;"/>
+								<input id="close" class="btn btn-default popClose" type="reset" value="关闭" @click="CloseCon()">
+								<input id="AddadminUser_submit" class="btn btn-primary" type="button" value="提交" @click="addSubmit()" v-if="isAdd">
+								<input id="EditadminUser_submit" class="btn btn-primary" type="button" value="提交" v-else="isAdd" @click="editSubmit()">
+							</div>
+						</form>
+						
+					</div>
+				</div>
+			</div>	
+		</div>	
+    </div>
+</div>	    
+	<script src="js/vue.js" ></script>
+	<script src="js/vue-resource.js" ></script>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el:'#example',
+			data:{
+				items:"",
+        		addShow:true,
+        		isAdd:true,
+        		disable:false,
+        		popTitle:'添加',
+        		userName:'',
+        		desc:'',
+        		dataIndex:'',
+        		selected: '质检员',  
+        		roles:[
+        			{ text: '质检员', value: '质检员' },  
+        			{ text: '施工员', value: '施工员' },  
+        			{ text: '审计员', value: '审计员' },  
+        			{ text: '资料员', value: '资料员' } 
+        		],
+        		checkboxData:[
+	        		{id:'HTTP',value:'HTTP'},
+				    {id:'HTTPS',value:'HTTPS'},
+				    {id:'TCP',value:'TCP'},
+				    {id:'SSH',value:'SSH'}
+			    ],
+        		checkModes:[],//登录类型选择
+        		allChecked:"",
+        		allChecks:[],
+        		
+			},
+			methods:{
+				ShowCon:function(){
+					this.addShow = false;
+					this.resetInput(); 
+				},
+				CloseCon:function(){
+					this.addShow = true; 
+				},
+				resetInput:function(){
+					this.userName = '';
+					this.selected = '质检员';
+					this.desc = '';
+					this.checkModes.splice(0,99);
+				},
+				getShowData:function(){
+					this.$http.get('a.json').then(function(res){
+	    				this.items = res.data;
+	    			},function(res){
+	    				alert(res.status);
+	    			});
+				},
+				addSetData:function(){
+					this.ShowCon();
+					this.isAdd = true;
+					this.popTitle = "添加";
+					this.disable = false;
+				},
+				addSubmit:function(){
+					this.items.push({
+						name:this.userName,
+						role:this.selected,
+						desc:this.desc,
+						modes:this.checkModes.join(",")
+					});
+					this.addShow = true; 
+				},
+				editGetData:function(num){
+					
+					this.dataIndex = num;
+					this.ShowCon();
+					this.popTitle = "编辑";
+					this.disable = true;
+					this.isAdd = false;
+					this.userName = this.items[num].name;
+					this.desc = this.items[num].desc;
+					this.selected = this.items[num].role;
+					this.checkModes = this.items[num].modes.split(",");
+				},
+				editSubmit:function(){
+					this.items[this.dataIndex].name = this.userName;
+					this.items[this.dataIndex].desc = this.desc;
+					this.items[this.dataIndex].role = this.selected;
+					this.items[this.dataIndex].modes = this.checkModes.join(","); 
+					this.addShow = true; 
+				},
+				delData:function(num){
+					this.items.splice(num,1);
+					//this.items.$remove(this.items[num]);
+					//console.log(this.items[num]);
+				},
+				delAny:function(){
+		            var arr = [];
+		            var len = this.items.length;
+		            if(this.allChecks.length === 0){
+			        	alert("删除个数不能为0！");
+		            }else if(len>0){
+			            for (var i = 0; i < len; i++) {
+			                if (this.allChecks.indexOf(i)>=0) {
+			                    console.log(this.allChecks.indexOf(i))
+			                }else{
+			                    arr.push(this.allChecks[i])
+			                }
+			            }
+			            this.items = arr;
+			            this.allChecks = []
+			        }
+		        },
+		        inArray:function(arr,val){
+		        	var i = arr.length;
+					while (i--) {
+					    if (arr[i] === val) {
+					      return true;
+					    }
+					}
+					return false;
+		        },
+		        pushInde:function(n){
+		        	var b = this.inArray(this.allChecks,n);
+		        	if(b){
+		        		this.allChecks.pop(n);
+		        	}else{
+		        		this.allChecks.push(n);
+		        	}
+		        	console.log(this.allChecks);
+		        },
+				checkedAll: function() {
+				    var _this = this;
+				    //console.log(_this.allChecked);
+				    if (this.allChecked) {//实现反选
+				      _this.allChecks = [];
+				      this.allChecked = false;
+				    }else{//实现全选
+				      _this.allChecks = [];
+				      _this.items.forEach(function(item,i) {
+				        _this.allChecks.push(i);
+				      });
+				      this.allChecked = true;
+				    }
+				}
+			
+			}
+		});
+		vm.getShowData();
+	</script>
+
+</body>
+</html>

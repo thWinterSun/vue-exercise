@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="app">
+      <modal :mm="msg" @msg-child="get"></modal>
+      <p >{{msg}}</p>
+    </div>
+
+    <template id="modelPage">
+      <div >
+        <h3 v-text="mm"></h3>
+        <input type="button" name="" value="发送子组件数据" @click="send">
+      </div>
+    </template>
+  <script src="../js/vue.js" charset="utf-8"></script>
+  <script>
+    Vue.component("modal",{
+      template:"#modelPage",
+      props:["mm"],
+      data(){
+        return{
+          message:"这里是组件的数据"
+        }
+      },
+      methods:{
+        send(){
+          this.$emit('msg-child',this.message);
+        }
+      }
+    });
+    var vm = new Vue({
+      el:".app",
+      data:{
+          msg:'这里副组件数据'
+      },
+      methods:{
+        get(msg){
+          this.msg = msg;
+        }
+      }
+    })
+  </script>
+  </body>
+</html>

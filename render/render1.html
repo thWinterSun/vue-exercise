@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="box">
+			<tb-heading :level="6">
+				<a href="#">Hello </a>
+			</tb-heading>
+		</div>
+		<template id="templateId">
+			<h1 v-if="level === 1">
+				<slot></slot>
+			</h1>
+			<h2 v-else-if="level ===2">
+				<slot></slot>
+			</h2>
+			<h6 v-else-if="level ===6">
+				<slot></slot>
+			</h2>
+		</template>
+		<script src="../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript">
+			Vue.component('tb-heading',{
+				template: '#templateId',
+				props: {
+					level: {
+						type: Number,
+						required: true
+					}
+				}
+			})
+			new Vue({
+				el: '#box'
+			})
+		</script>
+	</body>
+</html>

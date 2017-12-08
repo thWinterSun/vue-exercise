@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app2">
+		    <child :parent-msg="parentMsg"></child>
+		</div>
+		<template id="aa">
+			<span>{{ parentMsg }}</span>
+		</template>
+		<script src="../js/vue.js"></script>
+
+		<script>
+		    Vue.component('child', {
+		        props: ['parentMsg'],
+		        template: '#aa'
+		    });
+		    new Vue({
+		        el: '#app2',
+		        data: {
+		            parentMsg: 'msg from parent!'
+		        }
+		    })
+		</script>
+
+
+	</body>
+</html>

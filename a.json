@@ -1,0 +1,6 @@
+[
+    {"name":"Tom","desc":"person","role":"施工员","modes":"HTTP"},
+    {"name":"Jack","desc":"person","role":"质检员","modes":"TCP"},
+    {"name":"Mary","desc":"pig","role":"审计员","modes":"TCP,HTTPS"}
+    
+]

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<!--组件的模板-->
+		<template id="nav">
+			<div>
+				<span v-text="ind" @click="change"></span>
+			</div>
+		</template>
+		
+		<!--容器-->
+		<div id="box">
+			<!--组件-->
+			<page :my-index="ind"></page>
+		</div>
+		<script src="js/vue.js"></script>
+		<script type="text/javascript">
+			//定义一个组件
+			Vue.component("page",{
+				template:"#nav",
+				methods:{
+					change:function(){
+						this.msa = "数据改变了"
+					}
+				},
+				props:['myIndex']
+			});
+			var vm = new Vue({
+				el:"#box",
+				data:{
+					ind:"这是实例组件数据"
+				}
+				
+			});
+		</script>
+	</body>
+</html>

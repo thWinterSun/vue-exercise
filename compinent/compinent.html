@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="UTF-8">
+</head>
+<body>
+
+		<div id="box">
+			<page></page>
+			<bbb></bbb>
+		</div>
+		<script src="../js/vue.js"></script>
+		<script type="text/javascript">
+
+			/*
+			 *注意：确保在初始化根实例之前注册了组件
+			 * */
+			Vue.component("page",{
+				template:"<span @click='change'>我是全局组件{{msa}}</span>",
+				data(){
+					return {
+						msa:"这是全局组件的数据"
+					}
+				},
+				methods:{
+					change:function(){
+						this.msa = "数据改变了"
+					}
+				}
+			});
+			var vm = new Vue({
+				el:"#box",
+				components:{
+					"bbb":{
+						template:"<h3>我是局部组件 <span>{{msg}}</span></h3>",
+						data(){
+							return {
+								msg:"这是局部组件的数据"
+							}
+						}
+					}
+				}
+
+			});
+		</script>
+	</body>
+</html>

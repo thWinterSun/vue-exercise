@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+<div id="app">
+	<h1>Named Routed</h1>
+	<p>Curent route name: {{$route.name}}</p>
+	<ul>
+		<li>
+			<router-link :to="{ name:'home'}">home</router-link>
+		</li>
+		<li>
+			<router-link :to="{ name:'foo'}">foo</router-link>
+		</li>
+		<li>
+			<router-link :to="{ name: 'bar',params: {id: 123}}">bar</router-link>
+		</li>
+	</ul>
+	<router-view></router-view>
+</div>
+
+
+
+<script type="text/javascript" src="../js/vue.js"></script>
+<script type="text/javascript" src="../js/vue-router.min.js"></script>
+<script type="text/javascript">
+	
+	const Home = {
+		template: '<div>This is Home</div>'
+	}
+
+	const Foo = {
+		template: '<div>This is Foo</div>'
+	}
+
+	const Bar = {
+		template: '<div>This is Bar {{$route.params.id}}</div>'
+	}
+
+	const router = new VueRouter({
+		routes: [
+			{
+				path: '/',
+				name: 'home',
+				component: Home
+			},
+			{
+				path: '/foo',
+				name: 'foo',
+				component: Bar
+			},
+			{
+				path: '/bar/:id',
+				name: 'bar',
+				component: Bar
+			}
+		]
+	})
+
+	new Vue({
+		router
+	}).$mount('#app')
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

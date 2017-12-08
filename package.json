@@ -1,0 +1,18 @@
+{
+  "name": "iview",
+  "version": "1.0.0",
+  "description": "this is my first vue project",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "123456"
+  ],
+  "author": "dai",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "axios": "^0.16.2"
+  }
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="box">
+			<friend ></friend>
+		</div>
+		<template id="friendID">
+			<div >
+				<ul>
+					<li>{{maa}}</li>
+				</ul>
+				<child :msg = "maa"></child>
+				
+			</div>
+		</template>
+		
+		<template id="childID">
+			<ol>
+				<li @click="change">{{msg}}</li>
+			</ol>
+		</template>
+		<script src="js/vue.js"></script>
+		<script type="text/javascript">
+			var vm = new Vue({
+				el:"#box",
+				components:{
+					"friend":{
+						template:"#friendID",
+						data(){
+							return {"maa":"this is data"}
+						},
+						components:{
+							"child":{
+								template:"#childID",
+								data(){
+									return{
+										b:''
+									}
+								},
+								
+								props:['msg'],
+								methods:{
+									change(){
+										this.msg = "数据改变了"
+									}
+								}
+							}
+						}
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

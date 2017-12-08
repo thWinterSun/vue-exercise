@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	<div id="box">
+		<parent></parent>
+	</div>
+	<template id="parId">
+		<div>我是父组件
+			<br/>
+			<child :mmm="msg"></child>
+		</div>
+	</template>
+	<script src="js/vue.js" ></script>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el:"#box",
+			components:{
+				"parent":{
+					data(){
+						return {
+							msg:12345
+						}
+					},
+					template:"#parId",
+					components:{
+						"child":{
+							template:"<h3>我是子组件 {{mmm}}</h3>",
+							props:["mmm"]
+						}
+					}
+				}
+				
+			}
+		})
+	</script>
+	</body>
+</html>
